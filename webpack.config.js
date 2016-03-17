@@ -20,8 +20,7 @@ module.exports = {
 
   entry: {
     'index.js': './src/index.js',
-    'runner.js': './src/runner.js',
-    'preload.js': './src/preload.js',
+    'nw-install.js': './src/nw-install.js',
     'test.js': './test/index.js',
   },
 
@@ -46,21 +45,22 @@ module.exports = {
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
   },
 
-  externals: [
-    (ctx, req,  cb) => {
-      // if (resolve(ctx, req).indexOf(srcDir) !== 0) return cb()
-      if (/^\.\.?\//.test(req)) return cb()
-      cb(null, `commonjs ${req}`)
-    },
-  ],
+  // todo: 分离index.js/nw-install的webpack
+  // externals: [
+  //   (ctx, req,  cb) => {
+  //     // if (resolve(ctx, req).indexOf(srcDir) !== 0) return cb()
+  //     if (/^\.\.?\//.test(req)) return cb()
+  //     cb(null, `commonjs ${req}`)
+  //   },
+  // ],
 
   plugins: [
     // new NpmInstallPlugin({ save: true }),
     new NotifierPlugin({ alwaysNotify: true }),
     new webpack.NoErrorsPlugin(),
-    new webpack.ProvidePlugin({
-      Promise: 'bluebird',
-    }),
+    // new webpack.ProvidePlugin({
+    //   Promise: 'bluebird',
+    // }),
     new webpack.DefinePlugin({
       // rootDir: `"${resolve(__dirname, '..')}"`,
       // $dirname: '__dirname',
