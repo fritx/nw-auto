@@ -96,7 +96,8 @@ export default class Nixe {
   evaluate(fn, ...args) {
     return this.queue(() => new Promise((res, rej) => {
       const done = (errm, result) => {
-        if (errm) rej(errm)
+        // if (errm) rej(errm)
+        if (errm) rej(new Error(errm))
         // note: NaN becomes 0 via ipc
         // null/undefined becomes null
         else res(result)
