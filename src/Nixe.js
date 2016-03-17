@@ -1,20 +1,16 @@
 import { spawn } from 'child_process'
-import { join } from 'path'
+import which from 'which'
 import ipc from './ipc'
-
-const distDir = __dirname
 
 
 export default class Nixe {
 
   // todo: static/instance config
-  constructor(options = {}) {
-    const { electronPath } = options
-    const runner = join(distDir, 'runner.js')
-    const electronArgs = {}
+  constructor(entry, options = {}) {
+    const { nwPath } = options
     this.proc = spawn(
-      electronPath || require('electron-prebuilt'),
-      [runner].concat(JSON.stringify(electronArgs)),
+      nwPath || which.sync('nw'),
+      [entry],
       { stdio: [null, null, null, 'ipc'] }
     )
     this.child = ipc(this.proc)
@@ -42,6 +38,7 @@ export default class Nixe {
 
     this.child.once('app:ready', () => {
       this.appReady = true
+      console.log(1111, 'app:ready')
     })
 
     this.tasks = []
@@ -87,39 +84,9 @@ export default class Nixe {
     }))
   }
 
-  // note: if `dom-ready` is used instead of `did-finish-load`
-  // extra `goto` would cause "-3" thrown
-  goto(url) {
-    return this.queue(() => new Promise((res, rej) => {
-      const done = (errc, errd) => {
-        if (errc) rej(`${errc}: ${errd}`)
-        else res()
-        // note: parallel event listening should be removed
-        // this.child.removeListener('win:dom-ready', done)
-        this.child.removeListener('win:did-finish-load', done)
-        this.child.removeListener('win:did-fail-load', done)
-      }
-      this.child.emit('goto', url)
-      // this.child.once('win:dom-ready', () => done())
-      this.child.once('win:did-finish-load', () => done())
-      this.child.once('win:did-fail-load', done)
-    }))
-  }
-
   wait(delay) {
     return this.queue(() => new Promise((res) => {
       setTimeout(res, delay)
-    }))
-  }
-
-  execute(str) {
-    return this.queue(() => new Promise((res, rej) => {
-      const done = (errm, result) => {
-        if (errm) rej(errm)
-        else res(result)
-      }
-      this.child.emit('execute', str)
-      this.child.once('execute:done', done)
     }))
   }
 
@@ -134,20 +101,6 @@ export default class Nixe {
       // note: ipc cannot pass functions directly
       this.child.emit('evaluate', String(fn), ...args)
       this.child.once('evaluate:done', done)
-    }))
-  }
-
-  // note: dont use `Infinity`(=0) with setTimeout
-  // use null for Infinity instead
-  // also Infinity becomes null via ipc
-  loop(fn, interval, timeout) {
-    return this.queue(() => new Promise((res, rej) => {
-      const done = (errm) => {
-        if (errm) rej(errm)
-        else res()
-      }
-      this.child.emit('loop', String(fn), interval, timeout)
-      this.child.once('loop:done', done)
     }))
   }
 }
