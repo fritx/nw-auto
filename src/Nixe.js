@@ -1,6 +1,9 @@
 import { spawn } from 'child_process'
 import which from 'which'
 import ipc from './ipc'
+import IPC from 'tiny-ipc'
+
+IPC.makeHub('/tmp/nwsock')
 
 
 export default class Nixe {
@@ -38,12 +41,12 @@ export default class Nixe {
 
     this.child.once('app:ready', () => {
       this.appReady = true
-      console.log(1111, 'app:ready')
     })
 
     this.tasks = []
   }
 
+  // fixme: process.onexit kill不掉
   end() {
     if (this.proc.connected) this.proc.disconnect()
     this.proc.kill()
