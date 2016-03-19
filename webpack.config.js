@@ -46,13 +46,17 @@ module.exports = {
   },
 
   // todo: 分离index.js/nw-install的webpack
-  // externals: [
-  //   (ctx, req,  cb) => {
-  //     // if (resolve(ctx, req).indexOf(srcDir) !== 0) return cb()
-  //     if (/^\.\.?\//.test(req)) return cb()
-  //     cb(null, `commonjs ${req}`)
-  //   },
-  // ],
+  externals: [
+    (ctx, req,  cb) => {
+      // if (resolve(ctx, req).indexOf(srcDir) !== 0) return cb()
+      if (['bluebird'].indexOf(req) > -1) {
+        return cb(null, `commonjs ${req}`)
+      }
+      cb()
+      // if (/^\.\.?\//.test(req)) return cb()
+      // cb(null, `commonjs ${req}`)
+    },
+  ],
 
   plugins: [
     // new NpmInstallPlugin({ save: true }),

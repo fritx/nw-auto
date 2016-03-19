@@ -2,7 +2,10 @@ import { spawn } from 'child_process'
 import which from 'which'
 import ipc from './ipc'
 import IPC from 'tiny-ipc'
+import _tkill from 'tree-kill'
+import { promisify } from 'bluebird'
 
+const tkill = promisify(_tkill)
 IPC.makeHub('/tmp/nwsock')
 
 
@@ -47,9 +50,10 @@ export default class Nixe {
   }
 
   // fixme: process.onexit kill不掉
-  end() {
+  async end() {
     if (this.proc.connected) this.proc.disconnect()
-    this.proc.kill()
+    // this.proc.kill()
+    await tkill(this.proc.pid, 'SIGINT')
   }
 
   queue(task) {
