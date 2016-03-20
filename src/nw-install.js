@@ -1,13 +1,18 @@
 
-// 容错 babel-polyfill要求单例
-// import 'babel-polyfill'
-try {
-  require('babel-polyfill')
-  require('./runner')
-  require('./preload')
-} catch (err) {
-  // ignore
+if (!global.__nwauto) {
+  global.__nwauto = true
+  install()
 }
 
-// import './runner'
-// import './preload'
+function install() {
+
+  // 容错 babel-polyfill要求单例
+  try {
+    require('babel-polyfill')
+  } catch (err) {
+    // ignore
+  }
+
+  require('./runner')
+  require('./preload')
+}

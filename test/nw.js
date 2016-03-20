@@ -4,22 +4,20 @@ import Nixe from '../src/Nixe'
 
 describe('nw-auto', function () {
 
-  this.timeout(20 * 1000)
+  this.timeout(40 * 1000)
 
   let nixe
 
-  after(() => {
-    nixe.end()
+  after(async () => {
+    await nixe.end()
   })
 
   it('should construct', () => {
     nixe = new Nixe('../nw-chat')
+    nixe.child.on('web', (type, ...data) => { //fixme
+      console.log(type, data)
+    })
   })
-
-  // it('should end', () => {
-  //   nixe.end()
-  // })
-  // return
 
   it('should get ready', async () => {
     await nixe.ready()
@@ -33,7 +31,7 @@ describe('nw-auto', function () {
     result.should.be.eql(666)
   })
 
-  it('should end', () => {
-    nixe.end()
+  it('should end', async() => {
+    await nixe.end()
   })
 })
