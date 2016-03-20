@@ -20,7 +20,8 @@ module.exports = {
 
   entry: {
     'index.js': './src/index.js',
-    'nw-install.js': './src/nw-install.js',
+    'nw-install-main.js': './src/nw-install-main.js',
+    'nw-install-web.js': './src/nw-install-web.js',
     'test.js': './test/index.js',
   },
 
