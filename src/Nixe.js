@@ -21,7 +21,10 @@ export default class Nixe {
     )
     this.child = ipc(this.proc)
 
+    // https://github.com/segmentio/nightmare/commit/593b9750f299cc4eed5bcb07bd8c1c9eecab182f
     // process.setMaxListeners(Infinity)
+    const num = Math.max(process.listenerCount(), process.getMaxListeners())
+    process.setMaxListeners(num + 1) // 更全面的做法 确保该绑定不报错
     const end = () => this.end()
     process.on('uncaughtException', (e) => {
       console.error(e)
@@ -49,11 +52,10 @@ export default class Nixe {
     this.tasks = []
   }
 
-  // fixme: process.onexit kill不掉
   async end() {
     if (this.proc.connected) this.proc.disconnect()
     // this.proc.kill()
-    await tkill(this.proc.pid, 'SIGINT')
+    await tkill(this.proc.pid, 'SIGINT') // nw需要treekill
   }
 
   queue(task) {
@@ -76,7 +78,8 @@ export default class Nixe {
 
   // work as a "promise" ifself
   // make `run` optional
-  async then(res, rej) {
+  // async then(res, rej) {
+  then(res, rej) {
     return new Promise((_res, _rej) => {
       this.run().then(_res, _rej)
     })
