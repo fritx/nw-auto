@@ -1,5 +1,7 @@
 import { spawn } from 'child_process'
 import which from 'which'
+import { EventEmitter } from 'events'
+import proxy from './proxy'
 import ipc from './ipc'
 import IPC from 'tiny-ipc'
 import _tkill from 'tree-kill'
@@ -36,6 +38,21 @@ export default class Nixe {
     process.on('SIGQUIT', end)
     process.on('SIGHUP', end)
     process.on('SIGBREAK', end)
+
+    // 代理this.child的emitter用法
+    const proto = EventEmitter.prototype
+    proxy(this, this.child, Object.keys(proto))
+
+    // 额外的高级用法 once可以await
+    const once = this.once.bind(this)
+    this.once = (ekey, handler) => new Promise((res, rej) => {
+      once(ekey, (...args) => {
+        try {
+          handler(...args)
+          res()
+        } catch (err) { rej(err) }
+      })
+    })
 
     this.child.on('uncaughtException', (info = '') => {
       console.error('runner uncaughtException:', info.replace(/\n/g, '\n  '))
