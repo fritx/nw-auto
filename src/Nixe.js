@@ -15,6 +15,7 @@ export default class Nixe {
 
   // todo: static/instance config
   constructor(entry, options = {}) {
+    process.env.NW_AUTO = '1'
     const { nwPath } = options
     this.proc = spawn(
       nwPath || which.sync('nw'),
