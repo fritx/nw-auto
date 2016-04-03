@@ -2,7 +2,7 @@
 
 [NW.js][nwjs]-Desktop-App Animation(-Testing) Tool
 
-Migrated from [nixe][nixe], which works with [Electron][elctron]
+Migrated from [nixe][nixe], which works with [Electron][electron]
 
 
 ## WIP...
