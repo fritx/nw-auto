@@ -19,17 +19,20 @@ module.exports = ipc;
  * Initialize `ipc`
  */
 
-function ipc(process) {
+function ipc(proc, uuid) {
   var emitter = new Emitter();
   var emit = emitter.emit;
-  var ipc = IPC.getClient('/tmp/nwsock');
+  // ECONNREFUSED /tmp/nwsock try/catch也没用
+  // uuid = uuid || require('nw.gui').App.argv[0].replace(/^--/, '') // fixme
+  uuid = uuid || process.env.NW_AUTO_UUID // fixme
+  var ipc = IPC.getClient(`/tmp/nwauto_${uuid}`);
 
   // no parent
-  // if (!process.send) {
+  // if (!proc.send) {
   //   return emitter;
   // }
 
-  // process.on('message', function(data) {
+  // proc.on('message', function(data) {
   ipc.on('message', function (data) {
     // emit.apply(emitter, sliced(data));
     // emit.apply(emitter, [...data]);
@@ -37,9 +40,9 @@ function ipc(process) {
   });
 
   emitter.emit = function() {
-    // if(process.connected){
-      // process.send(sliced(arguments));
-      // process.send(Array.from(arguments));
+    // if(proc.connected){
+      // proc.send(sliced(arguments));
+      // proc.send(Array.from(arguments));
       ipc.broadcastMessage(JSON.stringify(Array.from(arguments)));
     // }
   }

@@ -4,8 +4,8 @@ import 'should'
 import co from 'co'
 import Nixe from '../src/Nixe'
 
-// ['test01', 'test02', 'test03'].forEach(thread)
-['test01'].forEach(thread)
+['test01', 'test02', 'test03'].forEach(thread)
+// ['test01'].forEach(thread)
 
 
 function thread(username) {
