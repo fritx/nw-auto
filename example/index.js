@@ -11,7 +11,10 @@ import Nixe from '../src/Nixe'
 function thread(username) {
   co(async() => {
     console.log('start:', username)
-    const nixe = new Nixe('../nw-chat')
+    const nixe = new Nixe('../nw-chat', {
+      noFocus: true,
+      noShow: true,
+    })
     nixe.on('web', (type, ...data) => { //fixme
       console.log('web', type, data)
     })
