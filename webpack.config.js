@@ -6,8 +6,7 @@ const NotifierPlugin = require('webpack-notifier')
 
 module.exports = {
 
-  target: 'node',
-  // target: 'electron',
+  target: 'node-webkit',
 
   // https://webpack.github.io/docs/configuration.html#node
   // https://github.com/webpack/webpack/issues/1599
@@ -23,6 +22,7 @@ module.exports = {
     'nw-install-main.js': './src/nw-install-main.js',
     'nw-install-web.js': './src/nw-install-web.js',
     'test.js': './test/index.js',
+    'example.js': './example/index.js',
   },
 
   output: {
