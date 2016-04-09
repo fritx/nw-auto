@@ -2,6 +2,7 @@ import { spawn } from 'child_process'
 import which from 'which'
 import { EventEmitter } from 'events'
 import proxy from './proxy'
+import guid from './guid'
 import ipc from './ipc'
 import IPC from 'tiny-ipc'
 import co from 'co'
@@ -9,21 +10,32 @@ import _tkill from 'tree-kill'
 import { promisify } from 'bluebird'
 
 const tkill = promisify(_tkill)
-IPC.makeHub('/tmp/nwsock')
 
 
 export default class Nixe {
 
   // todo: static/instance config
   constructor(entry, options = {}) {
-    process.env.NW_AUTO = '1'
+    // process.env.NW_AUTO = '1' // fixme
+    // const uuid = `${Math.random()}`.substr(2) // fixme
+    const uuid = guid() // fixme
+    IPC.makeHub(`/tmp/nwauto_${uuid}`) // fixme
+
     const { nwPath } = options
     this.proc = spawn(
       nwPath || which.sync('nw'),
+      // [entry, `--${uuid}`],
       [entry],
-      { stdio: [null, null, null, 'ipc'] }
+      {
+        stdio: [null, null, null, 'ipc'],
+        env: {
+          ...process.env,
+          NW_AUTO: '1',
+          NW_AUTO_UUID: uuid,
+        },
+      }
     )
-    this.child = ipc(this.proc)
+    this.child = ipc(this.proc, uuid)
     this.ended = false
 
     // https://github.com/segmentio/nightmare/commit/593b9750f299cc4eed5bcb07bd8c1c9eecab182f
@@ -116,8 +128,7 @@ export default class Nixe {
     return new Promise((_res, _rej) => {
       this.run().then(_res, _rej)
     })
-    .then(res)
-    .catch(rej)
+    .then(res, rej)
   }
 
   ready() {
