@@ -4,6 +4,7 @@ import { EventEmitter } from 'events'
 import proxy from './proxy'
 import ipc from './ipc'
 import IPC from 'tiny-ipc'
+import co from 'co'
 import _tkill from 'tree-kill'
 import { promisify } from 'bluebird'
 
@@ -23,22 +24,34 @@ export default class Nixe {
       { stdio: [null, null, null, 'ipc'] }
     )
     this.child = ipc(this.proc)
+    this.ended = false
 
     // https://github.com/segmentio/nightmare/commit/593b9750f299cc4eed5bcb07bd8c1c9eecab182f
     // process.setMaxListeners(Infinity)
-    const num = Math.max(process.listenerCount(), process.getMaxListeners())
-    process.setMaxListeners(num + 1) // 更全面的做法 确保该绑定不报错
-    const end = () => this.end()
-    process.on('uncaughtException', (e) => {
-      console.error(e)
-      end()
+    // const num = Math.max(process.listenerCount(), process.getMaxListeners())
+    // process.setMaxListeners(num + 1) // 更全面的做法 确保该绑定不报错
+    process.setMaxListeners(Infinity)
+    process.on('uncaughtException', (err) => {
+      console.error(err.stack)
+      // this.end() // 此处并不一定需要kill
     })
-    process.on('exit', end)
-    process.on('SIGINT', end)
-    process.on('SIGTERM', end)
-    process.on('SIGQUIT', end)
-    process.on('SIGHUP', end)
-    process.on('SIGBREAK', end)
+
+    let exited = false
+    // https://github.com/tj/co#var-fn--cowrapfn
+    const exit = co.wrap(async () => {
+      if (exited) return
+      exited = true
+      await this.end()
+      process.exit()
+    })
+    // todo: process.onexit没有充足时间
+    // 可否通过spawn一个其他进程来kill nw?
+    process.on('exit', exit)
+    process.on('SIGINT', exit)
+    process.on('SIGTERM', exit)
+    process.on('SIGQUIT', exit)
+    process.on('SIGHUP', exit)
+    process.on('SIGBREAK', exit)
 
     // 代理this.child的emitter用法
     const proto = EventEmitter.prototype
@@ -71,6 +84,8 @@ export default class Nixe {
   }
 
   async end() {
+    if (this.ended) return
+    this.ended = true
     if (this.proc.connected) this.proc.disconnect()
     // this.proc.kill()
     await tkill(this.proc.pid, 'SIGINT') // nw需要treekill

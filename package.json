@@ -29,6 +29,7 @@
   "dependencies": {
     "babel-polyfill": "^6.5.0",
     "bluebird": "^3.3.1",
+    "co": "^4.6.0",
     "tiny-ipc": "^0.1.0",
     "tree-kill": "^1.0.0"
   }
