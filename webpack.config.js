@@ -22,7 +22,8 @@ module.exports = {
     'nw-install-main.js': './src/nw-install-main.js',
     'nw-install-web.js': './src/nw-install-web.js',
     'test.js': './test/index.js',
-    'example.js': './example/index.js',
+    'nwchat.js': './example/nwchat.js',
+    'regt.js': './example/regt.js',
   },
 
   output: {

@@ -4,7 +4,7 @@ import 'should'
 import co from 'co'
 import Nixe from '../src/Nixe'
 
-['test01', 'test02', 'test03'].forEach(thread)
+;['test01', 'test02', 'test03'].forEach(thread)
 // ['test01'].forEach(thread)
 
 
@@ -25,7 +25,7 @@ function thread(username) {
         doc.querySelector('[name=username]').value = username
         doc.querySelector('[name=username]').blur()
         doc.querySelector('[name=password]').focus()
-        doc.querySelector('[name=password]').value = '123'
+        doc.querySelector('[name=password]').value = '5b3A%3zz'
         doc.querySelector('[name=password]').blur()
         doc.querySelector('[type=submit]').click()
       }, username)
@@ -49,4 +49,3 @@ function thread(username) {
     console.error(err.stack)
   })
 }
-
