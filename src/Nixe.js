@@ -21,7 +21,7 @@ export default class Nixe {
     const uuid = guid() // fixme
     IPC.makeHub(`/tmp/nwauto_${uuid}`) // fixme
 
-    const { nwPath } = options
+    const { nwPath, noFocus, noShow } = options
     this.proc = spawn(
       nwPath || which.sync('nw'),
       // [entry, `--${uuid}`],
@@ -32,6 +32,8 @@ export default class Nixe {
           ...process.env,
           NW_AUTO: '1',
           NW_AUTO_UUID: uuid,
+          NW_AUTO_NOFOCUS: noFocus ? '1' : '0',
+          NW_AUTO_NOSHOW: noShow ? '1' : '0',
         },
       }
     )
