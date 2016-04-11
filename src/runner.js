@@ -28,5 +28,4 @@ parent.on('evaluate', (fnstr, ...args) => {
 })
 
 parent.emit('app:ready')
-console.log('parent.emit app:ready')
 

@@ -5,7 +5,8 @@ import 'babel-polyfill'
 // import './electron'
 // import './Nixe'
 // import './flow'
-import './nw'
+// import './nw'
 // import './__chat'
+import './regt'
 
 install()
