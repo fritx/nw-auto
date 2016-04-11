@@ -7,6 +7,7 @@ import Chance from 'chance'
 import Nixe from '../src/Nixe'
 
 const chance = new Chance()
+process.env.GT_SERVER_URL = 'http://10.60.217.94:25041' // 指定连接环境
 
 ;['imtest0400'].forEach(thread)
 // ;['imtest0400', 'imtest0401', 'imtest0402'].forEach(thread)
@@ -16,9 +17,9 @@ function thread(username) {
   co(async() => {
     console.log('start:', username)
     const nixe = new Nixe('../../regt')
-    nixe.on('web', (type, ...data) => { //fixme
-      console.log('web', type, data)
-    })
+    // nixe.on('web', (type, ...data) => { //fixme
+    //   console.log('web', type, data)
+    // })
     await nixe.ready()
     console.log('nw ready')
 
@@ -66,9 +67,10 @@ function thread(username) {
 
     while (true) { // infinite loop
       // const keyword = 'imtest00'
-      const keyword = _.sample([
-        'near.yu', 'irina.su', 'o-kui.xiao', 'fritz.lin', 'o-kai.xiang',
-      ])
+      // const keyword = _.sample([
+      //   'near.yu', 'irina.su', 'o-kui.xiao', 'fritz.lin', 'o-kai.xiang',
+      // ])
+      const keyword = `imtest0${400 + _.random(0, 99)}`
       await nixe
         .evaluate((keyword) => {
           const doc = global._wins.home.window.document
