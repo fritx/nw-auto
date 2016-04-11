@@ -54,7 +54,7 @@ export default class Nixe {
       if (exited) return
       exited = true
       await this.end()
-      process.exit()
+      process.exit(0)
     })
     // todo: process.onexit没有充足时间
     // 可否通过spawn一个其他进程来kill nw?

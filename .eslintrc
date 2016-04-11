@@ -1,4 +1,5 @@
 {
+  "root": true,
   "extends": ["rackt"],
   "env": {
     "browser": true,
