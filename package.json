@@ -13,6 +13,7 @@
     "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.3",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.7.5",
     "babel-preset-async-to-bluebird": "^1.0.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
@@ -27,7 +28,7 @@
     "which": "^1.2.4"
   },
   "dependencies": {
-    "babel-polyfill": "^6.5.0",
+    "babel-runtime": "^5.8.38",
     "bluebird": "^3.3.1",
     "co": "^4.6.0",
     "tiny-ipc": "^0.1.0",
