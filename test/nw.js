@@ -85,8 +85,7 @@ describe('nw-auto', function () {
     isHomeOpen.should.be.eql(true)
   })
 
-  it('should end', (done) => {
-    // await nixe.end()
-
+  it('should end', async () => {
+    await nixe.end()
   })
 })
