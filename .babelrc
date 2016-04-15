@@ -5,6 +5,7 @@
     "async-to-bluebird"
   ],
   "plugins": [
+    "transform-runtime",
     "transform-decorators-legacy"
   ]
 }
