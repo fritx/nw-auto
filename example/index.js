@@ -1,5 +1,4 @@
 /* eslint-disable no-constant-condition */
-import 'babel-polyfill'
 import 'should'
 import co from 'co'
 import Nixe from '../src/Nixe'
