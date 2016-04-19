@@ -1,14 +1,15 @@
 {
   "name": "nixe",
   "version": "0.0.2",
-  "main": "dist",
+  "main": "lib",
   "scripts": {
-    "build": "webpack --progress",
+    "build": "babel src -d lib",
     "dev": "webpack -w --progress",
     "test": "mocha dist/test",
     "test-cov": "istanbul cover _mocha -- dist/test"
   },
   "devDependencies": {
+    "babel-cli": "^6.7.5",
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.3",
