@@ -16,28 +16,26 @@ export default class Nixe {
 
   // todo: static/instance config
   constructor(entry, options = {}) {
-    // process.env.NW_AUTO = '1' // fixme
-    // const uuid = `${Math.random()}`.substr(2) // fixme
-    const uuid = guid() // fixme
-    IPC.makeHub(`/tmp/nwauto_${uuid}`) // fixme
+    const sock = `/tmp/nwauto_${guid()}`
+    IPC.makeHub(sock) // fixme
 
     const { nwPath, noFocus, noShow } = options
     this.proc = spawn(
       nwPath || which.sync('nw'),
-      // [entry, `--${uuid}`],
       [entry],
       {
         stdio: [null, null, null, 'ipc'],
         env: {
           ...process.env,
           NW_AUTO: '1',
-          NW_AUTO_UUID: uuid,
+          NW_AUTO_DIST: __dirname, // dist路径
+          NW_AUTO_SOCK: sock,
           NW_AUTO_NOFOCUS: noFocus ? '1' : '0',
           NW_AUTO_NOSHOW: noShow ? '1' : '0',
         },
       }
     )
-    this.child = ipc(this.proc, uuid)
+    this.child = ipc(sock)
     this.ended = false
 
     // https://github.com/segmentio/nightmare/commit/593b9750f299cc4eed5bcb07bd8c1c9eecab182f
@@ -56,7 +54,7 @@ export default class Nixe {
       if (exited) return
       exited = true
       await this.end()
-      process.exit()
+      process.exit(0)
     })
     // todo: process.onexit没有充足时间
     // 可否通过spawn一个其他进程来kill nw?

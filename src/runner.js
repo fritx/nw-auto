@@ -1,7 +1,7 @@
 // import gui from 'nw.gui'
 import ipc from './ipc'
 
-const parent = ipc(process)
+const parent = ipc()
 // const win = gui.Window.get()
 
 

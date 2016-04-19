@@ -2,7 +2,7 @@
 // https://github.com/segmentio/nightmare/blob/master/lib%2Fpreload.js
 
 window.__nixe = {};
-__nixe.ipc = require('./ipc')(process);
+__nixe.ipc = require('./ipc')();
 // __nixe.sliced = require('sliced');
 
 
