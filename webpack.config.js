@@ -4,6 +4,11 @@ const webpack = require('webpack')
 // const NpmInstallPlugin = require('npm-install-webpack-plugin')
 const NotifierPlugin = require('webpack-notifier')
 
+const srcDir = resolve(__dirname, 'src')
+const testDir = resolve(__dirname, 'test')
+const exampleDir = resolve(__dirname, 'example')
+const dirs = [srcDir, testDir, exampleDir]
+
 module.exports = {
 
   target: 'node-webkit',
@@ -18,7 +23,6 @@ module.exports = {
   // context: __dirname,
 
   entry: {
-    'index.js': './src/index.js',
     'nw-install-main.js': './src/nw-install-main.js',
     'nw-install-web.js': './src/nw-install-web.js',
     'test.js': './test/index.js',
@@ -33,11 +37,11 @@ module.exports = {
 
   module: {
     preLoaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'eslint' },
+      { test: /\.js$/, include: dirs, loader: 'eslint' },
     ],
     loaders: [
       { test: /\.json$/, exclude: /node_modules/, loader: 'json' },
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
+      { test: /\.js$/, include: dirs, loader: 'babel' },
     ],
   },
 

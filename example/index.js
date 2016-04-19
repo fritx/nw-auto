@@ -1,6 +1,7 @@
 /* eslint-disable no-constant-condition */
 import 'should'
 import co from 'co'
+// import Nixe from '../lib'
 import Nixe from '../src/Nixe'
 
 ['test01', 'test02', 'test03'].forEach(thread)

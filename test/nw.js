@@ -1,6 +1,7 @@
 
 import 'should'
-import Nixe from '../src/Nixe'
+import Nixe from '../lib'
+// import Nixe from '../src/Nixe'
 
 describe('nw-auto', function () {
 
