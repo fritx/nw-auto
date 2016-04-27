@@ -1,6 +1,6 @@
 import { spawn } from 'child_process'
-import which from 'which'
 import { EventEmitter } from 'events'
+import { getNwPath } from './get-nw-path'
 import proxy from './proxy'
 import guid from './guid'
 import ipc from './ipc'
@@ -10,7 +10,7 @@ import _tkill from 'tree-kill'
 import { promisify } from 'bluebird'
 
 const tkill = promisify(_tkill)
-
+const defaultNwPath = getNwPath()
 
 export default class Nixe {
 
@@ -20,8 +20,12 @@ export default class Nixe {
     IPC.makeHub(sock) // fixme
 
     const { nwPath, noFocus, noShow } = options
+    if (!nwPath && !defaultNwPath) {
+      throw new Error('No nw path found')
+    }
+
     this.proc = spawn(
-      nwPath || which.sync('nw'),
+      nwPath || defaultNwPath,
       [entry],
       {
         stdio: 'ignore',
