@@ -24,7 +24,7 @@ export default class Nixe {
       nwPath || which.sync('nw'),
       [entry],
       {
-        stdio: [null, null, null, 'ipc'],
+        stdio: 'ignore',
         env: {
           ...process.env,
           NW_AUTO: '1',
