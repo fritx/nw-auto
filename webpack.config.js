@@ -54,7 +54,7 @@ module.exports = {
   externals: [
     (ctx, req,  cb) => {
       // if (resolve(ctx, req).indexOf(srcDir) !== 0) return cb()
-      if (['bluebird'].indexOf(req) > -1) {
+      if (['bluebird', 'nw'].indexOf(req) > -1) {
         return cb(null, `commonjs ${req}`)
       }
       cb()
